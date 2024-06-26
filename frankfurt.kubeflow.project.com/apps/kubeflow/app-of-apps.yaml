@@ -49,7 +49,6 @@ spec:
                     enabled: true
                     excludeNamespaces:
                       - cert-manager
-                      - cilium
                       - cluster-autoscaler
                       - default
                       - deploykf-auth
@@ -82,7 +81,7 @@ spec:
                         namespace: kubeflow
                       spec:
                         encryptedData:
-                          .dockerconfigjson: AgBa8SNhEJzYrwElXdw9qmrL7Qm4I/v2aVjxC9tQmA4569nI9Oe9ylXoc2jTT06dZFi7M+GBkg1pejwALQryDSFrM+qFV77y++9lOmqHfd80aJRtj/e8BA+fvMubjeiZA2fCWoe2i37p1PHKtYkkq6uaTgxLOCllxNFlMpzj/YUdUE8F/yfCggBxEs0YDQ0zkqYchE7vCWQ5r5QVxglN6rLADn5/yOO7fLCz6INmKKQ3Wf97T/agoQPiSbKFa8LqQiixco7yQdp51s2h9aJvSsFPkL47B78rmlpcSdpYNQleKqMXozFtYWC2j5LJMQkxH/mephFrjB8PVdY/xkmX/XOH4XYVA3sDWDPE1MigIn2Qi2NJ2yFeVxNNOBD0d8Hy+bltJnWrf+t7qg3lHEBvUb6oSguzquUx9PqS3SSBVqOM6l0sHXaTMgJzJNko/qlLLQP2rK0eUN4PeqBFvc2hqiYlsy8wdDG+ob4K7Q1Ps/LC9Wf8MFLa58PP5J9ojcY5jX9KGUX4X94foqKVeJID7cintcczgRh/IIs9AvRxz7BbXMj1Y1CJhWDbGhS4+bFnoKBcvRO5G8hZI6rR9e2322NEbopJ012ZZk1wTCaeMmY25GJW+GxrASYRIdh1V0xzfQjJXnSe+VS9GwFLW0iqVcBkzeMJZLUoy3fjpco9Y9vmmUNoCI9x7uSRCm407TprTNgKMQNpfYZq3l7XWwipVgCsUYR54uSyoBddnaBgSqe5Ir77kOgc7od2E3eCotHhGFQTBsA+DYmK8xJy0r5LpL7ylnEx102DoOaejoEZiQCNgxNyuRGSgsFYX2q1BJq0PB/b0tcRiLuCa9YSAS+xb580xnpcgDQkoM1PjwFxQAcVCecPBofR1AnkN0aUWLAFjm5hAJM119vYihDPCju2AhQhUbrBLZgOgjlUnItF94bLgP5MexYRFGl1aKqYir9OOr54ZDHdKOJjag5tuhX9KkManhiV6ks7bGiiogqin6jXgx8qnQHANMHMrZCRy6WDkE2tyYIab2GSRljezL/MaeJ1nexF+kS0fi+IvaQtSG546ePY5tjb0pdrZF6PbeL4yWPyhoikkEl0
+                          .dockerconfigjson: ''
                         template:
                           metadata:
                             creationTimestamp: null
@@ -92,16 +91,17 @@ spec:
             deploykf_core:
               deploykf_auth:
                 dex:
+                  # ToDo: Prevent plain text user passwords in manifests
                   staticPasswords:
                     - email: "kfadmin@project.com"
                       password:
-                        value: "Q@wUGa>+dKeROQ@L-9(B_*o(>h[3k0:W[F@?-#!u1YDp<%@fP%aRq@oX71l-?`No"
+                        value: "secret-password-here"
                     - email: "user1@project.com"
                       password:
-                        value: "gAsLD`:i|cfyM^!hRTXalIzHJbTE=nxgw)sEFN*jEWLm()CYVu68#`Rs^OGeVU;["
+                        value: "secret-password-here"
                     - email: "user2@project.com"
                       password:
-                        value: "CDQ]6lq6vtq[|b,Nt-^!"
+                        value: "secret-password-here"
               deploykf_istio_gateway:
                 charts:
                   istioGateway: 
@@ -140,8 +140,8 @@ spec:
                       namespace: cert-manager
                     spec:
                       encryptedData:
-                        AWS_ACCESS_KEY_ID: AgA5BwCjH3rgNO0VJlZORr7LT3mN3UiiTwl+TkQNEDFfuYXwDuUUsVjqPVxlWgng8skfj8+bgPqEvRglg/83homK9Zy6N08AeWhd1ATPsGnnQaAoG4PCpv+fi0sA/OuGhnrgrLJpcYW0s5+T/rYWnQEe0R1jhEm2AepfUFT/RQRCC9o0l06JX4ylKa1i7fA2iUyplSMaJ326yJqH0sf7+7FVG4o+e4riPG1x/2PkxsC03mEupBHd9S//m5Lvu7z+bwVDm/R3wFIUgAgd/pynZ76DaLcQxVLvyBEDVTFfX2F0FhKcjF2SZ6ZbfXzxa/KlaChgvb7A/xFrKkGPhY2n+z3WoYLHp31ptme2Q0u8lgmOerIrFEtmI8fFiWPMDld3wMW+dLonsO6lxVeWKlFMjjYCz5yQffZ6bHz510oPCVA2bFL6LG6ctnC0AJpaGGMLj2x9nXPsDGlBj8fqRG/NeJw3Gnz9BMWFcOmFzKFWi/PF8fmz+zJVpNFpQBhoQZ+RmSljtvwDiMIIUpgUimBnz38Ocnk8uEaY1/aennyoQQKO9fpfgFIWAmRXte5SInrvARGfgYvZKwzInXAp6ExjxlAhlEpOeNF+vansBAZmitX2nMIn7f6LyylyfmhNRLX+531XEpn5+Y2u2xza1tZ48EDPsZYH2JkZzXqG0rops/3KkKjnTBTY81IQKE5BR2lBTcpvQj68z/XQrbDIkVQI6jkm4ks4WA==
-                        AWS_SECRET_ACCESS_KEY: AgBCLDdti5+dDhO1AmJaMJRuLlBNXzD9xScBkRHi6lZn/K92CK2GgxmZ+TaenSWyFcZnRhjpwUzA/OHrMLHUM0hlJYDKJWs7+eRjLdjLwzXTX12koTxlRuLQ1lL9X0+A/qVFjWT6cJwwQujQYM/5FT9Ci/DSVPP4MQ2piXgQiPWT6t/MZf84CpXy7sQ/CL75bmVA/866l0Od1QiOpFJknP0TJVX+swVzVzt7WmtI1dYIYpPcddQh8LrHXe0lSyCIWsBgS4QLzFL5RiNIqApHnTOBLDkkxAdwZVDVOFycF8LEdEw31ZU1EKn7WSSCP3WgHjuQLf1RjMMPTnHhin+fOazR2swvur1f5lWhZeA6FMPvcmGNv0ww9GyMaBtMYqo2yX3rlvMmraBbE78lqENoB4AV5Ax8pUVEAur+5WgZsP7p/B8ZRk8DjZekmmvHZ+QFFA9ii8046/R0M9sVdF9DF21/INiO4dqx+8XEG8bsUI2KHhXQJvJ7RarSMHrHRHeDuIS/0dbOU/iyLBdng/8kNTCGixLAPOcAdcOOXsAM1JpRQfvqpkLsZZp5zp3JDs3lxSu+veQw9tQjrQggV6t92ls8991nGZDXbK5gRr434kPjoKnZSGqwKdhdJOPotN+ET6hNJU2Rj4yWALQ7mdCFbb7SmSfqoPYQ52gilrTGXoPjU+VWwnbO0/ZfNQR6f8EPExI8x+75kNovgyOCg6SMfoIeFmHKOHCZOMe6eHeNUiQt9Hk4dR34Zkr0
+                        AWS_ACCESS_KEY_ID: ''
+                        AWS_SECRET_ACCESS_KEY: ''
                       template:
                         metadata:
                           creationTimestamp: null
@@ -166,8 +166,8 @@ spec:
                       namespace: kubeflow
                     spec:
                       encryptedData:
-                        AWS_ACCESS_KEY_ID: AgArV03eL+Z6JP6R058sIsrEAVJW7+oVcvqPKPmAF96MAdvVRJb3HdoVE1HK22OTej9TkFnOgGjHTLuVS4+qmGaEkleieOLtQ0xwB+2Rt9DfUMc8V78XmhM735m/nB14x3FJGEfBiIrs6cQaPbGKfZcayNRvORL1WidtzXe0Jg1JmKctXLYHeMNCo5YBzWYTthScK2pA4g5ieJB9TalJysrgXpud+KjKI2Nu/nVAhg1eW49uRzto6eIegpH0emP0RW6jIDKHnpoNmZZEWNJ+oY7UCIINdbchdjfk/wHyRe7aySSBHDwxpuG1Zi+BomlMXf+cLnDfHeI56JBKWJUfYA7i2EQzFf15ixKLl2NsyvTUuP2Gs90HBbrk3ZBRjITetRzoGZQMevuMAV4Q2Mfm/XIAKasPObCbe8rs12xljJYfaJQaT5OHSbKkFhoY3qVVuyNOeQGCLhqE/UlCAwp3IfbLRJJNc0aX6oDx0ijMSZCMvaR4VxUd4j16qceEZOGdgMzyyFiLA2hSVByuGwhiGzR16xhQbkJYXJbznhA3Y21Mh1n8sPI3N3pO75B50MvEdrdyDeGuDNTB2yetGAQX8yvAWu3jXqiJZmN4xCpIF5Mr1N9+IowacCQEVItVn8WtnRo0Sg0N4b7Z+9aJGo8OebrdpFC1B4hqfYYZVqU1VnYftqvNubjPiRQZjrviRXJl/n1HEy7B+oyUru8YBXg6wGxbh5JOpg==
-                        AWS_SECRET_ACCESS_KEY: AgB2YLSPXFYed4cxHBVnD7svQfQthgt3sK26YZW84ElHCF6W+fTzTGYwxFit7dyPIiFs+m/l9uxpcKDz52Lx0Deife+OCR0y3H4JMxpPKYcrBf7BVpsozA/6J0D5AFtPHbyFbaHO4dAO3CvQ1z6lzxummVOiwk+iBuPxRzB93GYrzvMULnsdnwflgugAAf4XuJmWOhYPXMEj3mDT0LYCYfz51i1wTzT70qNhH68x3MNwvazqHTNlI43U1fMw/UMZGI7ZRAFM0O/Vrv0x3WxuRN0Seul0L2foAgTPLnvo6oNcitL3ymUHU9wXRTabzCKAg3IsB/FTktWYvuZYh6tJYqm2TnsmUPPLYZuOSvu5GEJN6moOzPNVp+s71ajjIr+JnKz9QRQIW5tnjgiw23fSR6132bDGHl3GsqdrssESeeA/Y2fkzAjx+s7+krrTUmzb7VdWdJCEYsQu8ltlsTj0nD0u3kMSxi9rZgA3gM6lSFZo72Ufc5oayHmB22tRRM3S+BznvbCyFYzhM4lJxO7ilUx3vhtAQrnVc5jvzEcGLta4cqjCNRrQ2D3TxtdemRHaWE0qLCFCh56WUjhlKOY7dVhXLO3iMYHIOi7G+thkHMo3Qcs3k2qi4VFcQIIoBOqoJ85Yw35IVuUIpMvpV6utm2pKSaEJzvjdTP4zopvefDCa2b6IJBN2LV6ZZUiFogcrZJHa+UDd4ChZxHfgRRhyWCgBTvOtxdlv4xrXMkQYSpEQuu41A78xb4MA
+                        AWS_ACCESS_KEY_ID: ''
+                        AWS_SECRET_ACCESS_KEY: ''
                       template:
                         metadata:
                           creationTimestamp: null
@@ -264,10 +264,10 @@ spec:
                       namespace: kubeflow
                     spec:
                       encryptedData:
-                        mysql-password: AgAe4CptJ1VHiFAg3iwEhoauVnXRhkOWNZF1w433nsOwjLoy4gp8xMTqFFskXa7wgU8lV1MvpEcJwxk+m3OhWe5OAvG+4g/3RnNU/NU+1g2WCciRXBeM0R+K8QMu9mwbfU5ydSV/FeuU3fRLvTQWwUWgKrEtCYLgitSz6BTCfmXyKlP57MiFs6f+4UDIqETE/MR+904i0gAoPvsmYuUAgyP950wbfa7N7VH+RppbMlMSuM/EDrhwhkH8R60XsqauH3oZwzIaND7GpHOP7MCQqw1Vb90bT8hcfu4jBEIs+0XrwEO99BbYg3zOOBdC6n5dNxfjNyH9nzjhIMUW3CHrMMy+g/qv3cSsgzsv5adglb7n5cDAmHmDDdHX6APMDQhK7HsxTrBT4gvKz+IUZL9tZHki4ccs4JZFzyK1cqlbZlOxzBVuc+egdHR49IO4iWQKMvZAtMdiyERH5tsYZGD0ZphXm+FD0uXD+HpzW9VFLmBf6suVJBzIO0q9MtO2YPub74K7+lijmZ8PIF1zW/y6Bjo4FEoOmPayMJs5WusJh4qTFLkn0DWMBoG0dTp+rmXjDQjytCzcrrF8u/pivgPLC+Chzq/PiwTx+X7sSPNUeGVhno9bTFw1EC+x/Lk3hr/8WDlaX+s71lpzKikQcEGHYAT5vLe2sXJ+ZETBwvtwYaaaYjDdEcXfl9oLM4LuhttJUykm1/xC/cz4bLavxnKnEC+2wd2eYnR9yNj4zBdr29r8oFCImPZzf5JPDCfaS43+vizqvS8Z3kMQ2KbwcQ+2kbKP
-                        mysql-replication-password: AgB9LIUTtSZKxPgfImJdeISdwz2YJR6g6t6WpBjwZqgNK5ZsUVFqEKuqDmDm9qRyZ3ADUeZvPAMhpAtIPWQcIEZrrUHAAi7lFUb8hJ1ltmp/uGwCtnnKcf3BGyWBNVBPcnb7WzFE1pN8UfO637T/492+g6TXzunOB85cmfF17/J76gjQ6BS/Yrv65rSgmU7JThcoywuL7iLSNxilWt9s4BBwMBSCgK1/3kLweo3vMkhIbgpKTKeJF1v0pBJVzaz/dzdVUqU09LuufjVp1wALyNZnhJ4podOXcUAsZ8fMfEC6yVBI3LUxGJsD/SFx37Db0Og+6I3xAt9eLMNptF0qGNyzLrzB7fsYn2h/vIlX+jx2Ji1rMxRpBRrW1W1ZU5pudyHlrgNLVitlI1aN6l0+Usfxys25L1aE/Ju09ecFeZyo8zQyk4GqGt6UsvudNNHFMwFm4sxk+x3bTJLe5UaelNVPXjEKccWHeAI1JsP5tYk3E6A1WnVb/z9gn5yeyAR88pRI1s9kP+KrN9waFMO5CK933XeQsJThtUMGZuog9nsbW/BHZm8OaVxFbh4DRP2/rzPp7sUihSPTeibeyVnV8RTztkeNwoet8HgMLZ3R7oXNxZhEXSPP5h93fNi2fod7MRgGEJIQzW4JP3QB77VYXq5HJ0DZa08aCEWSzzFsJFhnbclw/yLhuYQN0DXpBlrnbJb/DUrUvGLL6prixZx6j3f8BaayKYvoevPwsyhfC6YXC85OVHgVQcL8mkdHkb7rBQSKgB/tvphLKyKB4IsiCgBK
-                        mysql-root-password: AgBCjxHFJ3lNum9OQ+1BAn5EhfY6szmdMPtHflSDpDElF8borscDMUmqqqNquwNegfNWGpT2vX68q/iWdIDM38/aUldio/B/BU89lGq92+5k2cefVagHJGrVPfaKWnUtcus4HYRXM+04IQIUCLMSt7BmhowWni4hUZcFOnunkcbGBlw4a1Wnab8D5GikYEbL7JcHCDw8scjNtaaMwgoFYIIDpNBg1T54XMhjIIBWUe+q+UJkzRFH5q5MZp5s1rLBAbWAUNiuQhLe6fk54Ig8kSX7FGgpVoL/Qwgqr0IIPwWl/aOlFRicec+hBHhoe3ZPlKEiahHAug5OTIwBGROdq4Hyz9TnIpXakfXjTcz8QibeDbAgiDaZ65WebwnShwSHHFwNXimBoohXZUYNLmwhf2ys5RboVJxIORmtXAHC5k+u9SUtbH6zzAYtJ3+QWJaBhG4MX5t5BeLSIbyUr0AqLWqKP8ITzuuGCPuMK9ZaRA2892hQQOJtxCFCWnDjvEbOWGwSbZDqUSQMhijlSFmqB1WTQVLPIl90+/WSUaP2/JOYvZjHWCi7dRHPVoCEEZ99B/W7pDnuJzybKgl9cy6JKiUaUt2cbJar/TuW8Is3CZ4pTmv4EUqG+i1lzNgLm/b6Va6aO4sXWQI4oRMQhjm/wmi7ne0VfDXdjC2f/l7F5/c/qOLCsbICMBLoQeN0QOj5guw7SFXtaX9B427qOT4rQACTlG+EVE7305W8AkHRI9qDw08mtds3hqKH5ZH9VrNpSlskC/8QbwRsKkwPw7iTo0mX
-                        mysql-username-katib: AgCPRQCqIWeoz6froTo6l3iwB65zMrDjVQppVRm1RZts07XYWSJOO5N1nX3DQbaJPuzJt6ORcfpGgmtpHd7+s3pKwyRk+BtIPrAG0XyKBsGUms2Eq/hCCST4Movk//fc0Cwit/5f3s5f+j3RwQLiob7JShNOm32oB36NLD96NDnx0U0cSDqigWtSsqsC/kS0RFp3ZxPSf2tpss3hnhLBI9ObQTcj9GUebOrK2Nie7z725vpAQ3SjopFqxtfu4yr4QuXuKD3dtxekGW604xM41w4UdB92lT8OziDdwBPi75XQpgUPUNRGKBUu/39ZE8WyyzEaprn7rMYiLwcE2+R3UM5yjK3m4VCkaVQ3HzjeEkGblbzjfSqRtJGWJqyKvcheiW0y6bcqwVJR3jWaYqB7wak/4ucN3gMebiqHqAzJU8DrhKaDM2OQow93hsIvsVfai+1rN5fGnmvvCGUN1/mSVUo/aoB7W6cp9jMcfE9098xTeb/uTTQxAMrXNAPf8OSdDS1/e1s3jH19jDv2DsrUJqJQORJ130FB2EtwZj1vbmB04Dt/X3GdnrwBaKfc4qmoxKuXhXvDBUs7sRbXgQsrd4hlFfqm221uMw8DZDpcQzg8RVHibci2dQYUe40PFYX1jLCKzkR4fbwyortIaJG2/gV+iLJ6hlu03OnnuZZW8GqQqCVwqj28mfEBzBgC4JyTHVIobMyMxWdLxw==
+                        mysql-password: ''
+                        mysql-replication-password: ''
+                        mysql-root-password: '' 
+                        mysql-username-katib: ''
                       template:
                         metadata:
                           creationTimestamp: null
@@ -287,7 +287,7 @@ spec:
                         storage: 8Gi
                       csi:
                         driver: ebs.csi.aws.com
-                        volumeHandle: vol-03769344ca9be672f
+                        volumeHandle: vol-xxx
                       nodeAffinity:
                         required:
                           nodeSelectorTerms:
@@ -429,10 +429,10 @@ spec:
                       namespace: kubeflow
                     spec:
                       encryptedData:
-                        mysql-password: AgA6beDQI5ijwVE+LJ4kOK/SPzUnNNH5d5ryUxSL9aNNdOxFWxWGHhzlLXfohioVfHCY2UloxKdyeSEGdY/XHY1LYqqm0LV+20VdLpeD34g1yeNQl/Ot5IVtWAs8ErHTRrXekp5bD4ojrLtt+ZEQ7mgTxOymxq/HH0w3R0U7coaeAPASLvYCnXvdXHpn5N/jZxYZysfLKE4pQ8+6u5L1UE3TTPnD9hcAObL52vgxoHG/zwABtBJKGKVKu+FyR+/PjnUEHk27kaLVAFduHDXU3O+1fiS5k4GCjr13NWU28vpboZ+KvQ3iMzE72N+Ng7RWyVxfLnQFuShcdq59ntI9eJWrUz0LZjur4ohHnEQsFklCltFVea2MEab/AN9twp63jHZtxI67Z2aMFbihz08+sRPg3EmTIRy6mDcHRVnFnR8Yiy013s1YJiv+7Gf5pZoKmtQtA9j67mX67I4Tzf2TzwSWl5rxh76FHGxsuDRZeYQ1Tj6lGOzVGpURE5I59pcagb72bJd6yLW7Uk6YZ5/OVbLqC2rnCrYUnbwaWbBVLPSHo1srVP3dO/W1uo4MKp3ZPyevOk4Sc5mN52Re2wPOfiU8xAb0TaiKxJlz81ZGg15d4/EJN2zuHi6DWFo8EY7wdILr2ZKjqKfI19NQJGj4HzpK0t5jsh7G0iAuE51HviN0oaxBMVPhcbIRGsb9Hc5MaLOv1qYOO7rH5AWZGW0SnyMlbXKXBlofAYsV0P1vjMeklMsWZ7OXR8sOrdz0lIKDgdyL3tCNf7KSv8IU2989vs+k
-                        mysql-replication-password: AgBJKm/4Y5feTjKZ6m8hNmZ9uM9ClA2VYPXW2sOy6c2twev3wpGBB342HkKAcTjIhBzu8DblwkJAVcVlFVeGOtJRDsuVVlnMoTFQCQpYH1ffM22qxip4zK7y9sIW4u+lhWCBzbpa/HJ5KXsopPN+ymXVwKBaycz/0DeqULTrW/Qrp+PZ4mdPARY2Sr2QIKIJWQrNtZTm+ZiGFHkQ+ktubYk8GOTzckN2aMioaCIsUw0AEl4QBlYTSI1pvwC+9S2X9upsYnmRweIcTG8jLWyUEuo54VfM3tDW9tuQK9s+BMZAe/bIZg1yF/N9sxOUX5VXEsnOWlh09fP5omlM9oITxXs/FodOcvUMgBiimhZuv6rq3P2Q9OgC3HrJjalb6IQrOlVTSGikx7cOrJiGfqio6lvR+45seKRlIxpFkTk+lE8FTVi4LGb5kkj3GMjMeySgfD1LoXEzkaWoFFku89FbRvST+/HlSulM7aRpyrxx67YPnNneS18Peb+z3WXYtMFSUuJhql16ayYIMJqAdEAG+UrluLSvC1ZxjW8GuxYrNG2JOrJNk6INOytTACx67a/+TfNHf7HUQVyN6v4bXcyTq1vw1UtPL1vlcRYIcdbywC34ucFrnhXtFDMizi+xQFCtF+pt+pK724w5/lbKqNj67diZSWoXH1gT5bCZVPPD5aLr+O0bTE1WzjTc3vmnADn9C4ObgK8BO7d0vKi0Zaofx7uZvtUBcSgLOMv+aecaeuUEWdbOhDXLXBY9RXTMKfmZafLOj7QS+mRmFpuG0yGP55QI
-                        mysql-root-password: AgBdro3qlGtFPVkS93hGPHuR4J5HOBIMqXHYK7BvS1/EezYU2fGzt9j0+ub1hBmydDmOGatLLigljvSVt7guhZiM2jGPPLhAslQ1VXi13qQoQ9Pc5Daob5q74yIbGtQ+t3tijFkZKfRFqM6qMF6ARsGuAa2Y2n4sdcy5NrsVDr+Xe/wbPKQoyaLkkb5CxaTIr6vWgLU1uq/8/315nEBXp64/xI+X/m8R+a7a0dnA1lZgA7lb6sMsPm22w7KliqB2LCxC854OlLU6pgUJj3BTpVbibKbeZ2m1wpbCAQVJIjybzMJ0j9qe82vLNDiVZ1XDb9bhkN1wwO0VfoddIuni45Md3ZlA0zqI6XqFprDNeLE4m/gWH7rjeYpleLocLY5cjn1PZsfoZPU542PAR2B7NVdkK3ypqFYsQ+dnjsAfZe4MYkaxA3y1kVJVLbCIsPsNO5QaazmWKYcBCoLYxRmKOna27Owxte5zsNuCyVrqzVf+dWAgpsrdPF+HgTfaDQdJmzXgY1QPRPS2B+KHSLldbIXjgJhbwRgSF1cgm3kWbQ/lX0Z3q3UlmnrGl1CUVlBj1UDc8hOwAfUIt+xXbElQJP2cXNHwhRLH9Dz7xvp2fCYFisFe9Vre/NiZccwdKiuBQlXSI4dUy/KzAp0B9hkdI8euoxm4yMd2qlbVEPoAAH8avM4iSqNAKXM6pQLiLHRuDZZ3AiIyEc9sL0q44KwDFqNtpiVwMdN73A68MyHvZ5qb5D8RXwIFLFnVqnq8vq0j4P3ctYevPshpGufO7MYgiEZo
-                        mysql-username-ml-pipeline: AgB2kF/GfglQorImejIa2cDoBFyspBZzj4/5cVL7VdeBs5opM6q3m24RDHdbujMXFPZxCH1Nryt6/nmMKL6CPFCFVIJcU5i1fUQgcmn8znzsssrvTq/BBSgzI0rU+6Uwthy3lvnT4QiQsUVGiRijJhK0H/bBApo9FG5fcpOq79sPgQ4diX5KlRLe9asMdSt6fGFHjaOzVa/BoJy0OGY3vvmdcpQFO4qrgNH57GPviFFPjcb2jdYds6IqIlL9Gyub4RXxe1cns5O/8462XB3ih2aAAB58WHxmYHphTqPhnAWOYyyqlsuKRHxi94ovCAUgJSNGKWyzIVC+m/VLmmr1EWGXVgnymEGY0PBFjREoQou5zaa35YWzL4CphpfKyW/LBOFmaE2VE4EQacTRRqb3sPJLiijcfqE2qCGGhS8fCjFgkA9iFHgowmHce3zB0x4pDQb6IJD75FHqvdcx6NXhRCDaezHDFvT4nfFkAwiJ2sjlKHPiSHyT3ERJ+HGCoeFEV1ZnrAaawWCNCdgVZ3gi0i5quHdmessgr53cdG3MbDHL6ipem00+3ydnTyoQo+4bj99DLIxzhRameroXM0SYLC4GYCggv+C5/psF4aNxLxU7cw5e/vl1S1LE+pC9qGPKgxb3zmuPJ6dQ3jlmPNCIInRm9lcsvLRZFGYDVJ9jGHMX4gnmBkKy66fQNLAEkWUl49yHkrRheRAifg==
+                        mysql-password: ''
+                        mysql-replication-password: ''
+                        mysql-root-password: ''
+                        mysql-username-ml-pipeline: ''
                       template:
                         metadata:
                           creationTimestamp: null
@@ -447,8 +447,8 @@ spec:
                       namespace: kubeflow
                     spec:
                       encryptedData:
-                        AWS_ACCESS_KEY_ID: AgAElEjhjUKzZd9qDeWis/H0BJrIDaxmnqs4l6gsWCtOOfN/xuwSLvXji1Pc4ijlQRe26OlmW7bHP7Au7fCNfy7ufVXIANWgpzb9nAuZvX3l4n3aeaHDMDUJeeh4SKNrlPYIz1TU+5hyujtX4Dq0dM6Jl5B0oeGToQWj54a0EgvpHzHpdPXF03S/gMNDdXSZP2s8vZna5gFVa3u9nKyxp1P28saEBcFCA1FW6zSlV4reGB1ReOmgMkeFPk+Pwz/0wl/xkzFBlsdz21454Q0DzZUt0tY0rsDKdPwhvynUzJFeoDSgAdcsDYCt8YdjqO38/lTPAQzQTptOlMpoztWN4mcJnrjiwH/0OW2Llnfvr2hftG4UdP9ZLBxdZRWjQJQyJbaRmycstfRsxrepWymmGRp2C8gz7yGfJF617NqSV4vpbplpIIiU4V6xmYh0+oVB9AJkjb10HUTt3btq0KhRlLeg2tG4qBulOupCS/n9EeiAkBAk2w7EhSBePfNK7QkIzNYOjGo+Ir6H2XLhjOhWQGH1VF9gpkd8wCdwUtJot+Tb7qG32rCqOwx8yK5OQEGUR+xNbRbTsRX8Fvh//0Uqvwk2e79E0v4aSGodtSAVE1WFQ4BN2NcJTdG1jTB7wfcxcsPPTSxpXlyUJ8Bmp/AupFmqs7zZ3X91KeF3mM+TpsWhk6v9+57CIxHASsxjXI/yO4bC7BOvJfNZb5kb5zzAR2PdBqHI9A==
-                        AWS_SECRET_ACCESS_KEY: AgAsvizMJbXJ62+nHXuoOnjRdVCZkPCMDxGaMuyTPaZgrLHAlfqdWB7KGkKyIcu63Gbehu2xCf9C3i85U6pW0l1zgpePmRlMYdWmFDsdjdT3e0VUztlftsjDoZtIMexhLzpGRdMWOXVOp/h7gkwL7W3B+CHTzX29ywaPO0j9Q1Q/EVwFrrN0GIxKB/R/e/SAUUZS6gns+5YSXMs+A6E4h6iVfRa4af2EgUuU0PckT6kkjX+3yNWmm//XPF3FIbdgcdLC8qS3uqjDHFaCMQINHw86Z35ADRCUTh3xmcuI+VIavle8GWrdIkdE/QkCRIRRfnXD5jez6mW/+Z6lk4qVCbVoCFJKu0XWjYt4FUkwZWGe13hnShI+PATskKPHn5yjOzk5fmN0CHI+O9+NYC7ZzfTEhN9YfsVhLTRnRxtLpML/7YVqfgZ2UWDz+bs0Cv5afh1yqQ5goUHlHaxtEuYwdJLY5ZnFPohuUwvFmFOs0UUQgqCmzBQ+lamkBZ1pa62Y0jcowwPjGmcmdrq1Fv9SANmBBpZScBFxKKgPz8GS0+Xa75aiVorxaAiXwR95P2LZALfhQZfNUwyQ3pcYnt/ng8n//iYNJF+nKyYZaiePGUZZsbQb1SBADwCdFdwuIEx+6uWu/BDMRLj/HjXayw/NxmcjYqt55kTwhgHqES4tsKl++bJUKW0sIMwpDDgdVnexn9CDpOpzBjx4pDb2JFGY7mdmTyrv//aXEFAlNHUMTz2o4JOFHZZgehQA
+                        AWS_ACCESS_KEY_ID: ''
+                        AWS_SECRET_ACCESS_KEY: ''
                       template:
                         metadata:
                           creationTimestamp: null
@@ -468,7 +468,7 @@ spec:
                         storage: 8Gi
                       csi:
                         driver: ebs.csi.aws.com
-                        volumeHandle: vol-0984833ab025d4ad7
+                        volumeHandle: vol-xxx
                       nodeAffinity:
                         required:
                           nodeSelectorTerms:
