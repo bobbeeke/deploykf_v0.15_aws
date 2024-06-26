@@ -511,7 +511,7 @@ spec:
                   pipelinesDatabase: kfp_pipelines
                 objectStore:
                   useExternal: true
-                  host: s3.amazonaws.com
+                  host: s3.eu-central-1.amazonaws.com
                   port: ""
                   useSSL: true
                   auth:
