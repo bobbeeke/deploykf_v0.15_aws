@@ -1,0 +1,37 @@
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: msteams
+  namespace: flux-system
+spec:
+  type: msteams
+  secretRef:
+    name: teams-project-webhook
+---
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Alert
+metadata:
+  name: project
+  namespace: flux-system
+spec:
+  summary: "project infra"
+  eventMetadata:
+    cluster: "frankfurt.kubeflow.project.com"
+    region: "eu-west-1"
+  exclusionList:
+    - "failed to login to OCI registry"
+  providerRef:
+    name: msteams
+  eventSeverity: error
+  eventSources:
+    - kind: GitRepository
+      name: '*'
+    - kind: HelmChart
+      name: '*'
+    - kind: HelmRelease
+      name: '*'
+    - kind: HelmRepository
+      name: '*'
+    - kind: Kustomization
+      name: '*'

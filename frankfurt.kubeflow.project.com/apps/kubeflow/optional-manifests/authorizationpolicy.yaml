@@ -1,0 +1,31 @@
+# Optional:
+# 
+# Workaround autorization policy to fix a specific S3 connectivity issue in our environment.
+# See: https://github.com/deployKF/deployKF/issues/124
+#
+# Be careful! 
+# Applying this manifest messes with the normal Kubelfow authorization security flow and should only be used as a workaround if necessary.
+
+
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: fix-github-deploykf-issue-124
+  namespace: project-test
+spec:
+  rules:
+  - when:
+    - key: request.headers[kubeflow-userid]
+      values:
+      - user1@project.com
+      - user2@project.com
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/pipeline/artifacts/*"]
+    from:
+    - source:
+        ipBlocks: ["100.96.0.0/16"]
+  selector:
+    matchLabels:
+      app: ml-pipeline-ui-artifact

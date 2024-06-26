@@ -1,0 +1,54 @@
+---
+apiVersion: gemini.fairwinds.com/v1
+kind: SnapshotGroup
+metadata:
+  name: nfs-provisioner-data
+  namespace: nfs-provisioner
+spec:
+  persistentVolumeClaim:
+    claimName: nfs-provisioner-data
+  schedule:
+    - every: hour
+      keep: 3
+    - every: day
+      keep: 3
+    - every: month
+      keep: 6
+    - every: year
+      keep: 5
+---
+apiVersion: gemini.fairwinds.com/v1
+kind: SnapshotGroup
+metadata:
+  name: katib-mysql-data
+  namespace: kubeflow
+spec:
+  persistentVolumeClaim:
+    claimName: katib-mysql-data
+  schedule:
+    - every: hour
+      keep: 3
+    - every: day
+      keep: 3
+    - every: month
+      keep: 6
+    - every: year
+      keep: 5
+---
+apiVersion: gemini.fairwinds.com/v1
+kind: SnapshotGroup
+metadata:
+  name: ml-pipeline-mysql-data
+  namespace: kubeflow
+spec:
+  persistentVolumeClaim:
+    claimName: ml-pipeline-mysql-data
+  schedule:
+    - every: hour
+      keep: 3
+    - every: day
+      keep: 3
+    - every: month
+      keep: 6
+    - every: year
+      keep: 5

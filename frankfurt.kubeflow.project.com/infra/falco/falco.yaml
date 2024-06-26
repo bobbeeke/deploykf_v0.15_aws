@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: falco
+  namespace: flux-system
+spec:
+  releaseName: falco
+  targetNamespace: falco
+  storageNamespace: falco
+  interval: 5m
+  chart:
+    spec:
+      chart: falco
+      version: 4.5.0
+      sourceRef:
+        kind: HelmRepository
+        name: falcosecurity
+        namespace: flux-system
+      interval: 1m
+  values:
+    customRules:
+      rules_user_known_k8s_api_callers.yaml: |-
+        - macro: always_true
+          condition: >
+            (evt.num>=0)
+        - macro: user_known_contact_k8s_api_server_activities
+          condition: >
+            (always_true)
+    driver:
+      kind: "ebpf"
+    falcosidekick:
+      config:
+        customfields: "cluster:frankfurt.kubeflow.project.com"
+        existingSecret: falco-falcosidekick-teams-webhook
+        teams:
+          minimumpriority: "warning"
+      enabled: true
+    tty: true

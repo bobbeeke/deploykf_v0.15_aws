@@ -1,0 +1,63 @@
+# Optional:
+#
+# Example cronjob to ensure user notebooks are shut down at the end of the day to free up cloud resources.
+# Works well in combination with cluster-autoscaler. 
+
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: project-test
+  name: cron-runner
+rules:
+- apiGroups: ["kubeflow.org"]
+  resources: ["notebooks"]
+  verbs: ["patch", "list"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: cron-runner
+  namespace: project-test
+roleRef:
+  kind: Role
+  name: cron-runner
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: sa-cron-runner
+  namespace: project-test
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: sa-cron-runner
+  namespace: project-test
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: notebook-scale-down-job
+  namespace: project-test
+spec:
+  concurrencyPolicy: Forbid
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          annotations:
+            sidecar.istio.io/inject: "false"
+        spec:
+          serviceAccountName: sa-cron-runner
+          containers:
+          - name: notebook-scale-down-job
+            image: bitnami/kubectl:latest
+            command:
+            - /bin/sh
+            - -c
+            - kubectl -n project-test annotate --overwrite notebooks.kubeflow.org --all kubeflow-resource-stopped='' 
+          restartPolicy: OnFailure
+  schedule: "0 19 * * *"
+  successfulJobsHistoryLimit: 0
+  suspend: false

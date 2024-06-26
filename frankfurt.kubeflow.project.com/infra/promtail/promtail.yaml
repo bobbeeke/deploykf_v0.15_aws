@@ -1,0 +1,43 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: promtail
+  namespace: flux-system
+spec:
+  releaseName: promtail
+  targetNamespace: promtail
+  storageNamespace: promtail
+  interval: 5m
+  chart:
+    spec:
+      chart: promtail
+      version: 6.16.0
+      sourceRef:
+        kind: HelmRepository
+        name: grafana
+        namespace: flux-system
+      interval: 1m
+  values:
+    config:
+      clients:
+        - headers:
+            X-Scope-OrgID: ${TENANT_ID}
+          url: https://logging.project.com/loki/api/v1/push
+    extraArgs:
+      - -config.expand-env=true
+    extraEnvFrom:
+      - secretRef:
+          name: promtail-tenant-id
+    tolerations:
+      - key: node-role.kubernetes.io/control-plane
+        operator: Exists
+        effect: NoSchedule
+      - key: kubeflow/cpu
+        operator: Exists
+        effect: NoSchedule
+      - key: nvidia.com/gpu
+        operator: Exists
+        effect: NoSchedule
+
+
+

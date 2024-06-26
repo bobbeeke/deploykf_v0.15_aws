@@ -1,0 +1,27 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: nfs-provisioner
+  namespace: flux-system
+spec:
+  releaseName: nfs-provisioner
+  targetNamespace: nfs-provisioner
+  storageNamespace: nfs-provisioner
+  interval: 5m
+  chart:
+    spec:
+      chart: nfs-server-provisioner
+      version: 1.8.0
+      sourceRef:
+        kind: HelmRepository
+        name: nfs-provisioner
+        namespace: flux-system
+      interval: 1m
+  values:
+    persistence:
+      enabled: true
+      existingClaim: nfs-provisioner-data
+    storageClass:
+      mountOptions:
+        - vers=4
+      reclaimPolicy: Retain

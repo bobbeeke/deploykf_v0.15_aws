@@ -1,0 +1,39 @@
+# Optional:
+#
+# S3 data volume to mount into pipelines or notebooks as a file system. 
+# Requirements: mountpoint-s3-csi-driver 
+# See: https://github.com/awslabs/mountpoint-s3-csi-driver   
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: s3-project-shared-storage-disk
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteMany
+  mountOptions:
+    - uid=1000
+    - gid=100
+    - allow-other
+  csi:
+    driver: s3.csi.aws.com
+    volumeHandle: s3-csi-driver-volume
+    volumeAttributes:
+      bucketName: project-shared-storage-disk
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: s3-project-shared-storage-disk
+  namespace: project-test
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: ""
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: s3-project-shared-storage-disk
